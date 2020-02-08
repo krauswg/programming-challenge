@@ -3,6 +3,7 @@ package de.exxcellent.challenge;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -22,7 +23,7 @@ public class WeatherReaderTest {
 
 	@Test
 	public void testReaderLenient_fail() {
-		String file = "weather-fail.csv";
+		String file = "target/classes/de/exxcellent/challenge/weather-fail.csv";
 		boolean lenient = true;
 		int expectedRecords = 0;
 		int expectedErrors = 2;
@@ -31,7 +32,7 @@ public class WeatherReaderTest {
 
 	@Test
 	public void testReaderStrict_fail() {
-		String file = "weather-fail.csv";
+		String file = "target/classes/de/exxcellent/challenge/weather-fail.csv";
 		boolean lenient = false;
 		int expectedRecords = 0;
 		int expectedErrors = 2;
@@ -40,7 +41,7 @@ public class WeatherReaderTest {
 
 	@Test
 	public void testReaderLenient_lenient() {
-		String file = "weather-lenient.csv";
+		String file = "target/classes/de/exxcellent/challenge/weather-lenient.csv";
 		boolean lenient = true;
 		int expectedRecords = 2;
 		int expectedErrors = 0;
@@ -49,7 +50,7 @@ public class WeatherReaderTest {
 
 	@Test
 	public void testReaderStrict_lenient() {
-		String file = "weather-lenient.csv";
+		String file = "target/classes/de/exxcellent/challenge/weather-lenient.csv";
 		boolean lenient = false;
 		int expectedRecords = 1;
 		int expectedErrors = 1;
@@ -58,7 +59,7 @@ public class WeatherReaderTest {
 
 	@Test
 	public void testReaderLenient_strict() {
-		String file = "weather-strict.csv";
+		String file = "target/classes/de/exxcellent/challenge/weather-strict.csv";
 		boolean lenient = true;
 		int expectedRecords = 1;
 		int expectedErrors = 0;
@@ -67,21 +68,22 @@ public class WeatherReaderTest {
 
 	@Test
 	public void testReaderStrict_strict() {
-		String file = "weather-strict.csv";
+		String file = "target/classes/de/exxcellent/challenge/weather-strict.csv";
 		boolean lenient = false;
 		int expectedRecords = 1;
 		int expectedErrors = 0;
 		testReader(file, lenient, expectedRecords, expectedErrors);
 	}
 
-	private void testReader(String file, boolean lenient, int expectedRecords, int expectedErrors) {
+	private void testReader(String filename, boolean lenient, int expectedRecords, int expectedErrors) {
 		ICSVReader<WeatherRecord> reader = getTestReader();
 
 		InputStream input = null;
+		File file = new File(filename);
 		try {
 			input = new FileInputStream(file);
 		} catch (FileNotFoundException e) {
-			fail("File for testing was not found!", e);
+			fail("File for testing was not found: " + file.getAbsolutePath(), e);
 		}
 		List<WeatherRecord> csvEntries = reader.getCSVEntries(input, WeatherRecord::new, ",", Locale.ENGLISH, lenient);
 		assertEquals(expectedRecords, csvEntries.size(), "Unexpected record count of the parser.");
