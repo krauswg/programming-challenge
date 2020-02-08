@@ -24,11 +24,11 @@ public class BLWeatherData {
 	 * {@link WeatherRecord#getMnT()}
 	 * 
 	 * @param records to evaluate
-	 * @return the record with the lowest spread
+	 * @return the record with the lowest spread, or <code>null</code> if the list was empty.
 	 */
 	public static WeatherRecord getLowestSpread(List<WeatherRecord> records) {
 		WeatherRecord min = records.stream().min((w1, w2) -> (w1.getMxT() - w1.getMnT()) - (w2.getMxT() - w2.getMnT()))
-				.get();
+				.orElse(null);
 		return min;
 	}
 }

@@ -4,8 +4,10 @@
 package de.exxcellent.challenge;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -48,5 +50,12 @@ public class BLWeatherDataTest {
 		String filename = "This file should not exist";
 		List<WeatherRecord> records = BLWeatherData.readRecordsFromFile(filename);
 		assertEquals(records.size(), 0, "There should be no record.");
+	}
+
+	@Test
+	public void testGetLowestSpreadEmpty() {
+		List<WeatherRecord> records = new ArrayList<>();
+		WeatherRecord lowestDiff = BLWeatherData.getLowestSpread(records);
+		assertNull(lowestDiff, "Empty List should return null");
 	}
 }
