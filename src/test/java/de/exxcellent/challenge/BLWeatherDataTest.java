@@ -35,4 +35,18 @@ public class BLWeatherDataTest {
 		boolean isLowest = records.stream().allMatch(w -> (w.getMxT() - w.getMnT()) >= diff);
 		assertTrue(isLowest, "The returned record is not the day with the lowest spread");
 	}
+
+	@Test
+	public void testDirectory() {
+		String filename = ".";
+		List<WeatherRecord> records = BLWeatherData.readRecordsFromFile(filename);
+		assertEquals(records.size(), 0, "There should be no record.");
+	}
+
+	@Test
+	public void testUnreachableFile() {
+		String filename = "This file should not exist";
+		List<WeatherRecord> records = BLWeatherData.readRecordsFromFile(filename);
+		assertEquals(records.size(), 0, "There should be no record.");
+	}
 }

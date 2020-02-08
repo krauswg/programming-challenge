@@ -26,6 +26,10 @@ public class BLWeatherData {
 		SimpleCSVReader<WeatherRecord> reader = new SimpleCSVReader<>();
 		List<WeatherRecord> weather;
 		File file = new File(filename);
+		if (!(file.isFile() && file.canRead())) {
+			LOG.log(Level.WARNING, "Not a file or does not exist: " + file.getAbsolutePath());
+			return Collections.<WeatherRecord>emptyList();
+		}
 		try {
 			weather = reader.getCSVEntries(new FileInputStream(file), WeatherRecord::new, ",", Locale.ENGLISH, false);
 		} catch (FileNotFoundException e) {
