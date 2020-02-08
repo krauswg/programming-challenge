@@ -1,10 +1,10 @@
 package de.exxcellent.challenge.businessobject;
 
 import java.text.NumberFormat;
-import java.text.ParsePosition;
 import java.util.Locale;
 
 import de.exxcellent.challenge.CSVException;
+import de.exxcellent.challenge.CSVUtil;
 import de.exxcellent.challenge.interfaces.IReadableFromCSV;
 
 /**
@@ -102,33 +102,21 @@ public class WeatherRecord implements IReadableFromCSV {
 		NumberFormat numberFormat = NumberFormat.getInstance(locale);
 		int i = 0;
 		// * Day,MxT,MnT,AvT,AvDP,1HrP TPcpn,PDir,AvSp,Dir,MxS,SkyC,MxR,Mn,R AvSLP
-		day = getNumber(values[i++], lenient, numberFormat);
-		mxT = getNumber(values[i++], lenient, numberFormat).intValue();
-		mnT = getNumber(values[i++], lenient, numberFormat).intValue();
-		avT = getNumber(values[i++], lenient, numberFormat);
-		avDP = getNumber(values[i++], lenient, numberFormat);
-		x1hrP_TPcp = getNumber(values[i++], lenient, numberFormat);
-		pDir = getNumber(values[i++], lenient, numberFormat);
-		avSp = getNumber(values[i++], lenient, numberFormat);
-		dir = getNumber(values[i++], lenient, numberFormat);
-		mxS = getNumber(values[i++], lenient, numberFormat);
-		skyC = getNumber(values[i++], lenient, numberFormat);
-		mxr = getNumber(values[i++], lenient, numberFormat);
-		mn = getNumber(values[i++], lenient, numberFormat);
-		r_AvSLP = getNumber(values[i++], lenient, numberFormat);
+		day = CSVUtil.getNumber(values[i++], lenient, numberFormat);
+		mxT = CSVUtil.getNumber(values[i++], lenient, numberFormat).intValue();
+		mnT = CSVUtil.getNumber(values[i++], lenient, numberFormat).intValue();
+		avT = CSVUtil.getNumber(values[i++], lenient, numberFormat);
+		avDP = CSVUtil.getNumber(values[i++], lenient, numberFormat);
+		x1hrP_TPcp = CSVUtil.getNumber(values[i++], lenient, numberFormat);
+		pDir = CSVUtil.getNumber(values[i++], lenient, numberFormat);
+		avSp = CSVUtil.getNumber(values[i++], lenient, numberFormat);
+		dir = CSVUtil.getNumber(values[i++], lenient, numberFormat);
+		mxS = CSVUtil.getNumber(values[i++], lenient, numberFormat);
+		skyC = CSVUtil.getNumber(values[i++], lenient, numberFormat);
+		mxr = CSVUtil.getNumber(values[i++], lenient, numberFormat);
+		mn = CSVUtil.getNumber(values[i++], lenient, numberFormat);
+		r_AvSLP = CSVUtil.getNumber(values[i++], lenient, numberFormat);
 		return this;
 	}
 
-	
-	private Number getNumber(String value, boolean lenient, NumberFormat numberFormat) throws CSVException {
-		ParsePosition pos = new ParsePosition(0);
-		Number field = numberFormat.parse(value, pos);
-		if (pos.getIndex() == 0 && !value.isBlank()) {
-			throw new CSVException(value);
-		}
-		if (!lenient && (pos.getIndex() < value.length() - 1)) {
-			throw new CSVException(value);
-		}
-		return field;
-	}
 }
