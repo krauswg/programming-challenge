@@ -27,9 +27,14 @@ public final class App {
 
 		// Your preparation code …
 		String weatherFileName = "";
+		String footballFileName = "";
 		for (int i = 0; i < args.length; i++) {
 			if ("--weather".equals(args[i])) {
-				weatherFileName = handleWeather(args, i);
+				weatherFileName = getAbsoluteFileNameForParameter(args, i);
+				continue;
+			}
+			if ("--football".equals(args[i])) {
+				footballFileName = getAbsoluteFileNameForParameter(args, i);
 			}
 		}
 		if (!weatherFileName.isBlank()) {
@@ -37,18 +42,20 @@ public final class App {
 			String dayWithSmallestTempSpread = BLWeatherData.getLowestSpread(weather).getDay() + "";
 			System.out.printf("Day with smallest temperature spread : %s%n", dayWithSmallestTempSpread);
 		}
-		String teamWithSmallestGoalSpread = "A good team"; // Your goal analysis function call …
-		System.out.printf("Team with smallest goal spread       : %s%n", teamWithSmallestGoalSpread);
+		if (!footballFileName.isBlank()) {
+			String teamWithSmallestGoalSpread = "A good team"; // Your goal analysis function call …
+			System.out.printf("Team with smallest goal spread       : %s%n", teamWithSmallestGoalSpread);
+		}
 	}
 
-	private static String handleWeather(String[] args, int idx) {
+	private static String getAbsoluteFileNameForParameter(String[] args, int idx) {
 		if (idx + 1 >= args.length) {
-			throw new RuntimeException("--weather needs to be followed by the filename!");
+			throw new RuntimeException(args[idx] + " needs to be followed by the filename!");
 		}
-		File weatherFile = new File(args[idx + 1]);
-		if (!(weatherFile.canRead() && weatherFile.isFile())) {
-			throw new RuntimeException("Unable to read file at: " + weatherFile.getAbsolutePath());
+		File csvFile = new File(args[idx + 1]);
+		if (!(csvFile.canRead() && csvFile.isFile())) {
+			throw new RuntimeException("Unable to read file at: " + csvFile.getAbsolutePath());
 		}
-		return weatherFile.getAbsolutePath();
+		return csvFile.getAbsolutePath();
 	}
 }
