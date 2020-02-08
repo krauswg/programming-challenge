@@ -3,6 +3,9 @@ package de.exxcellent.challenge.interfaces;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Locale;
+import java.util.function.Supplier;
+
+import de.exxcellent.challenge.businessobject.WeatherRecord;
 
 /**
  * An interface for a simple CSV reader
@@ -22,7 +25,7 @@ public interface ICSVReader<CSVObjectType extends IReadableFromCSV> {
 	 * @param lenient   whether numbers may contain trailing characters
 	 * @return An unmodifiable List of the read Objects
 	 */
-	public List<CSVObjectType> getCSVEntries(InputStream input, String separator, Locale locale, boolean lenient);
+	public List<CSVObjectType> getCSVEntries(InputStream input, Supplier<CSVObjectType> constructor, String separator, Locale locale, boolean lenient);
 
 	/**
 	 * Returns a List of lines which failed to parse. See
@@ -39,4 +42,5 @@ public interface ICSVReader<CSVObjectType extends IReadableFromCSV> {
 	 * @return true, if at least one line could not be parsed
 	 */
 	public boolean hasError();
+
 }

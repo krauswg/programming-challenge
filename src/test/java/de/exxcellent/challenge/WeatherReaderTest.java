@@ -17,7 +17,7 @@ import de.exxcellent.challenge.interfaces.ICSVReader;
 public class WeatherReaderTest {
 
 	private ICSVReader<WeatherRecord> getTestReader() {
-		throw new RuntimeException("Not implemented yet.");
+		return new SimpleCSVReader<WeatherRecord>();
 	}
 
 	@Test
@@ -43,7 +43,7 @@ public class WeatherReaderTest {
 		String file = "weather-lenient.csv";
 		boolean lenient = true;
 		int expectedRecords = 2;
-		int expectedErrors = 1; // Header line
+		int expectedErrors = 0;
 		testReader(file, lenient, expectedRecords, expectedErrors);
 	}
 
@@ -51,8 +51,8 @@ public class WeatherReaderTest {
 	public void testReaderStrict_lenient() {
 		String file = "weather-lenient.csv";
 		boolean lenient = false;
-		int expectedRecords = 0;
-		int expectedErrors = 3;
+		int expectedRecords = 1;
+		int expectedErrors = 1;
 		testReader(file, lenient, expectedRecords, expectedErrors);
 	}
 
@@ -61,7 +61,7 @@ public class WeatherReaderTest {
 		String file = "weather-strict.csv";
 		boolean lenient = true;
 		int expectedRecords = 1;
-		int expectedErrors = 1; // Header line
+		int expectedErrors = 0;
 		testReader(file, lenient, expectedRecords, expectedErrors);
 	}
 
@@ -70,7 +70,7 @@ public class WeatherReaderTest {
 		String file = "weather-strict.csv";
 		boolean lenient = false;
 		int expectedRecords = 1;
-		int expectedErrors = 1; // Header line
+		int expectedErrors = 0;
 		testReader(file, lenient, expectedRecords, expectedErrors);
 	}
 
@@ -83,8 +83,8 @@ public class WeatherReaderTest {
 		} catch (FileNotFoundException e) {
 			fail("File for testing was not found!", e);
 		}
-		List<WeatherRecord> csvEntries = reader.getCSVEntries(input, ",", Locale.ENGLISH, lenient);
+		List<WeatherRecord> csvEntries = reader.getCSVEntries(input, WeatherRecord::new, ",", Locale.ENGLISH, lenient);
 		assertEquals(expectedRecords, csvEntries.size(), "Unexpected record count of the parser.");
-		assertEquals(expectedErrors, reader.getLinesWithError(), "Unexpected error count of the parser.");
+		assertEquals(expectedErrors, reader.getLinesWithError().length, "Unexpected error count of the parser.");
 	}
 }
