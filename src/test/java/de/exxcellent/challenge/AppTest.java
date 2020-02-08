@@ -1,9 +1,9 @@
 package de.exxcellent.challenge;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Example JUnit 5 test case.
@@ -29,5 +29,9 @@ class AppTest {
 		App.main("--football", "football.csv");
 	}
 
+	@Test
+	void runWeather() {
+		App.main("--weather", "src/main/resources/de/exxcellent/challenge/weather.csv");
+	}
 
 }

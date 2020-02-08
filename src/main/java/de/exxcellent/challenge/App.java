@@ -1,5 +1,6 @@
 package de.exxcellent.challenge;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.List;
 
@@ -17,18 +18,37 @@ public final class App {
 
 	/**
 	 * This is the main entry method of your program.
+	 * Going from the AppTest it is assumed that parameters are expected, i.e. --weather filename
 	 * 
 	 * @param args The CLI arguments passed
-	 * @throws FileNotFoundException 
+	 * @throws FileNotFoundException
 	 */
 	public static void main(String... args) {
 
 		// Your preparation code …
-		List<WeatherRecord> weather = BLWeatherData.readRecordsFromFile("src/main/resources/de/exxcellent/challenge/weather.csv");
-		String dayWithSmallestTempSpread = BLWeatherData.getLowestSpread(weather).getDay() + ""; // Your day analysis function call …
-		System.out.printf("Day with smallest temperature spread : %s%n", dayWithSmallestTempSpread);
-
+		String weatherFileName = "";
+		for (int i = 0; i < args.length; i++) {
+			if ("--weather".equals(args[i])) {
+				weatherFileName = handleWeather(args, i);
+			}
+		}
+		if (!weatherFileName.isBlank()) {
+			List<WeatherRecord> weather = BLWeatherData.readRecordsFromFile(weatherFileName);
+			String dayWithSmallestTempSpread = BLWeatherData.getLowestSpread(weather).getDay() + "";
+			System.out.printf("Day with smallest temperature spread : %s%n", dayWithSmallestTempSpread);
+		}
 		String teamWithSmallestGoalSpread = "A good team"; // Your goal analysis function call …
 		System.out.printf("Team with smallest goal spread       : %s%n", teamWithSmallestGoalSpread);
+	}
+
+	private static String handleWeather(String[] args, int idx) {
+		if (idx + 1 >= args.length) {
+			throw new RuntimeException("--weather needs to be followed by the filename!");
+		}
+		File weatherFile = new File(args[idx + 1]);
+		if (!(weatherFile.canRead() && weatherFile.isFile())) {
+			throw new RuntimeException("Unable to read file at: " + weatherFile.getAbsolutePath());
+		}
+		return weatherFile.getAbsolutePath();
 	}
 }
