@@ -4,7 +4,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.List;
 
+import de.exxcellent.challenge.businessLogic.BLFootballData;
 import de.exxcellent.challenge.businessLogic.BLWeatherData;
+import de.exxcellent.challenge.businessobject.FootballTeam;
 import de.exxcellent.challenge.businessobject.WeatherRecord;
 
 /**
@@ -43,7 +45,8 @@ public final class App {
 			System.out.printf("Day with smallest temperature spread : %s%n", dayWithSmallestTempSpread);
 		}
 		if (!footballFileName.isBlank()) {
-			String teamWithSmallestGoalSpread = "A good team"; // Your goal analysis function call …
+			List<FootballTeam> teams = BLFootballData.readRecordsFromFile(footballFileName);
+			String teamWithSmallestGoalSpread = BLFootballData.getLowestDiffInGoals(teams).getTeam();
 			System.out.printf("Team with smallest goal spread       : %s%n", teamWithSmallestGoalSpread);
 		}
 	}
