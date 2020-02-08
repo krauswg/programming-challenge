@@ -1,20 +1,12 @@
 package de.exxcellent.challenge.businessLogic;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.lang.invoke.MethodHandles;
 import java.util.Collections;
 import java.util.List;
-import java.util.Locale;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
-import de.exxcellent.challenge.SimpleCSVReader;
+import de.exxcellent.challenge.CSVUtil;
 import de.exxcellent.challenge.businessobject.WeatherRecord;
 
 public class BLWeatherData {
-	private static final Logger LOG = Logger.getLogger(MethodHandles.lookup().getClass().getSimpleName());
 
 	/**
 	 * Reads the records from the file
@@ -23,20 +15,7 @@ public class BLWeatherData {
 	 * @return the entries or an {@link Collections#emptyList()} if the file could not be read
 	 */
 	public static List<WeatherRecord> readRecordsFromFile(String filename) {
-		SimpleCSVReader<WeatherRecord> reader = new SimpleCSVReader<>();
-		List<WeatherRecord> weather;
-		File file = new File(filename);
-		if (!(file.isFile() && file.canRead())) {
-			LOG.log(Level.WARNING, "Not a file or does not exist: " + file.getAbsolutePath());
-			return Collections.<WeatherRecord>emptyList();
-		}
-		try {
-			weather = reader.getCSVEntries(new FileInputStream(file), WeatherRecord::new, ",", Locale.ENGLISH, false);
-		} catch (FileNotFoundException e) {
-			LOG.log(Level.WARNING, "Unable to read file: " + file.getAbsolutePath(), e);
-			return Collections.<WeatherRecord>emptyList();
-		}
-
+		List<WeatherRecord> weather = CSVUtil.readRecordsFromFile(filename, WeatherRecord::new);
 		return weather;
 	}
 
