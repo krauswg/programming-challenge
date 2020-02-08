@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../jacoco-resources/report.gif" type="image/gif"/><title>SimpleCSVReader.java</title><link rel="stylesheet" href="../../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">WeatherReader_BLWeather_BLFootball_AppTests</a> &gt; <a href="../../index.html" class="el_group">challenge</a> &gt; <a href="../index.html" class="el_bundle">src/main/java</a> &gt; <a href="index.source.html" class="el_package">de.exxcellent.challenge</a> &gt; <span class="el_source">SimpleCSVReader.java</span></div><h1>SimpleCSVReader.java</h1><pre class="source lang-java linenums">package de.exxcellent.challenge;
+
+import java.io.InputStream;
+import java.lang.invoke.MethodHandles;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+import java.util.Scanner;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.Supplier;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import de.exxcellent.challenge.interfaces.ICSVReader;
+import de.exxcellent.challenge.interfaces.IReadableFromCSV;
+
+<span class="fc" id="L17">public class SimpleCSVReader&lt;BO extends IReadableFromCSV&gt; implements ICSVReader&lt;BO&gt; {</span>
+<span class="fc" id="L18">	private static final Logger LOG = Logger.getLogger(MethodHandles.lookup().getClass().getSimpleName());</span>
+	
+<span class="fc" id="L20">	private String headerLine = null;</span>
+<span class="fc" id="L21">	private List&lt;String&gt; errorLines = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L22">	private List&lt;BO&gt; entries = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L23">	private AtomicBoolean parsingStarted = new AtomicBoolean(false);</span>
+
+	@Override
+	public List&lt;BO&gt; getCSVEntries(InputStream input, Supplier&lt;BO&gt; constructor, String separator, Locale locale, boolean lenient) {
+<span class="fc bfc" id="L27" title="All 2 branches covered.">		if (!parsingStarted.compareAndSet(false, true)) {</span>
+<span class="fc" id="L28">			throw new IllegalStateException(&quot;The simple parser cannot be reused!&quot;);</span>
+		}
+<span class="fc" id="L30">		try (Scanner scanner = new Scanner(input)) {</span>
+<span class="fc bfc" id="L31" title="All 2 branches covered.">			while (scanner.hasNextLine()) {</span>
+<span class="fc" id="L32">				String line = scanner.nextLine();</span>
+<span class="fc bfc" id="L33" title="All 2 branches covered.">				if (headerLine == null) {</span>
+<span class="fc" id="L34">					headerLine = line;</span>
+<span class="fc" id="L35">					continue;</span>
+				}
+				try {
+<span class="fc" id="L38">					BO csvBusinessObject = constructor.get();</span>
+<span class="fc" id="L39">					csvBusinessObject.parseLine(line.split(separator), locale, lenient);</span>
+<span class="fc" id="L40">					entries.add(csvBusinessObject);</span>
+<span class="fc" id="L41">				} catch (CSVException e) {</span>
+<span class="fc" id="L42">					String msg = &quot;Unparseable line in input. Lenient: &quot; + lenient </span>
+<span class="fc" id="L43">							 + &quot;, Reason: &quot; + e.getReason() + &quot;, line: '&quot; + line + &quot;'&quot;;</span>
+<span class="fc" id="L44">					errorLines.add(line);</span>
+<span class="fc" id="L45">					LOG.log(Level.WARNING, msg, e);</span>
+<span class="fc" id="L46">				}</span>
+<span class="fc" id="L47">			}</span>
+		}
+<span class="fc" id="L49">		return entries;</span>
+	}
+
+	@Override
+	public String[] getLinesWithError() {
+<span class="fc" id="L54">		return errorLines.toArray(new String[errorLines.size()]);</span>
+	}
+
+	@Override
+	public boolean hasError() {
+<span class="fc bfc" id="L59" title="All 2 branches covered.">		return !errorLines.isEmpty();</span>
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.3.201901230119</span>WeatherReader_BLWeather_BLFootball_AppTests</div></body></html>

@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../jacoco-resources/report.gif" type="image/gif"/><title>WeatherReaderTest.java</title><link rel="stylesheet" href="../../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">WeatherReader_BLWeather_BLFootball_AppTests</a> &gt; <a href="../../index.html" class="el_group">challenge</a> &gt; <a href="../index.html" class="el_bundle">src/test/java</a> &gt; <a href="index.source.html" class="el_package">de.exxcellent.challenge</a> &gt; <span class="el_source">WeatherReaderTest.java</span></div><h1>WeatherReaderTest.java</h1><pre class="source lang-java linenums">package de.exxcellent.challenge;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+import java.util.List;
+import java.util.Locale;
+
+import org.junit.jupiter.api.Test;
+
+import de.exxcellent.challenge.businessobject.WeatherRecord;
+import de.exxcellent.challenge.interfaces.ICSVReader;
+
+<span class="fc" id="L18">public class WeatherReaderTest {</span>
+
+	private ICSVReader&lt;WeatherRecord&gt; getTestReader() {
+<span class="fc" id="L21">		return new SimpleCSVReader&lt;WeatherRecord&gt;();</span>
+	}
+
+	@Test
+	public void testReaderLenient_fail() {
+<span class="fc" id="L26">		String file = &quot;target/classes/de/exxcellent/challenge/weather-fail.csv&quot;;</span>
+<span class="fc" id="L27">		boolean lenient = true;</span>
+<span class="fc" id="L28">		int expectedRecords = 0;</span>
+<span class="fc" id="L29">		int expectedErrors = 2;</span>
+<span class="fc" id="L30">		testReader(file, lenient, expectedRecords, expectedErrors);</span>
+<span class="fc" id="L31">	}</span>
+
+	@Test
+	public void testReaderStrict_fail() {
+<span class="fc" id="L35">		String file = &quot;target/classes/de/exxcellent/challenge/weather-fail.csv&quot;;</span>
+<span class="fc" id="L36">		boolean lenient = false;</span>
+<span class="fc" id="L37">		int expectedRecords = 0;</span>
+<span class="fc" id="L38">		int expectedErrors = 2;</span>
+<span class="fc" id="L39">		testReader(file, lenient, expectedRecords, expectedErrors);</span>
+<span class="fc" id="L40">	}</span>
+
+	@Test
+	public void testReaderLenient_lenient() {
+<span class="fc" id="L44">		String file = &quot;target/classes/de/exxcellent/challenge/weather-lenient.csv&quot;;</span>
+<span class="fc" id="L45">		boolean lenient = true;</span>
+<span class="fc" id="L46">		int expectedRecords = 2;</span>
+<span class="fc" id="L47">		int expectedErrors = 0;</span>
+<span class="fc" id="L48">		testReader(file, lenient, expectedRecords, expectedErrors);</span>
+<span class="fc" id="L49">	}</span>
+
+	@Test
+	public void testReaderStrict_lenient() {
+<span class="fc" id="L53">		String file = &quot;target/classes/de/exxcellent/challenge/weather-lenient.csv&quot;;</span>
+<span class="fc" id="L54">		boolean lenient = false;</span>
+<span class="fc" id="L55">		int expectedRecords = 1;</span>
+<span class="fc" id="L56">		int expectedErrors = 1;</span>
+<span class="fc" id="L57">		testReader(file, lenient, expectedRecords, expectedErrors);</span>
+<span class="fc" id="L58">	}</span>
+
+	@Test
+	public void testReaderLenient_strict() {
+<span class="fc" id="L62">		String file = &quot;target/classes/de/exxcellent/challenge/weather-strict.csv&quot;;</span>
+<span class="fc" id="L63">		boolean lenient = true;</span>
+<span class="fc" id="L64">		int expectedRecords = 1;</span>
+<span class="fc" id="L65">		int expectedErrors = 0;</span>
+<span class="fc" id="L66">		testReader(file, lenient, expectedRecords, expectedErrors);</span>
+<span class="fc" id="L67">	}</span>
+
+	@Test
+	public void testReaderStrict_strict() {
+<span class="fc" id="L71">		String file = &quot;target/classes/de/exxcellent/challenge/weather-strict.csv&quot;;</span>
+<span class="fc" id="L72">		boolean lenient = false;</span>
+<span class="fc" id="L73">		int expectedRecords = 1;</span>
+<span class="fc" id="L74">		int expectedErrors = 0;</span>
+<span class="fc" id="L75">		testReader(file, lenient, expectedRecords, expectedErrors);</span>
+<span class="fc" id="L76">	}</span>
+
+	@Test
+	public void testReaderValues() {
+<span class="fc" id="L80">		String file = &quot;target/classes/de/exxcellent/challenge/weather-strict.csv&quot;;</span>
+<span class="fc" id="L81">		boolean lenient = false;</span>
+<span class="fc" id="L82">		int expectedRecords = 1;</span>
+<span class="fc" id="L83">		int expectedErrors = 0;</span>
+<span class="fc" id="L84">		List&lt;WeatherRecord&gt; csvEntry = testReader(file, lenient, expectedRecords, expectedErrors);</span>
+<span class="fc" id="L85">		WeatherRecord record = csvEntry.get(0);</span>
+		// 1,88,59,74,53.8,0,280,9.6,270,17,1.6,93,23,1004.5
+<span class="fc" id="L87">		assertEquals(88, record.getMxT(), &quot;Max temperature was not as expected!&quot;);</span>
+<span class="fc" id="L88">		assertEquals(59, record.getMnT(), &quot;Max temperature was not as expected!&quot;);</span>
+<span class="fc" id="L89">		assertEquals(1004.5d, record.getR_AvSLP(), &quot;R AvSLP was not as expected!&quot;);</span>
+<span class="fc" id="L90">	}</span>
+
+	@Test
+	public void testReuse() {
+<span class="fc" id="L94">		ICSVReader&lt;WeatherRecord&gt; reader = getTestReader();</span>
+<span class="fc" id="L95">		String filename = &quot;target/classes/de/exxcellent/challenge/weather-strict.csv&quot;;</span>
+<span class="fc" id="L96">		InputStream input = null;</span>
+<span class="fc" id="L97">		File file = new File(filename);</span>
+		try {
+<span class="fc" id="L99">			input = new FileInputStream(file);</span>
+<span class="nc" id="L100">		} catch (FileNotFoundException e) {</span>
+<span class="nc" id="L101">			fail(&quot;File for testing was not found: &quot; + file.getAbsolutePath(), e);</span>
+<span class="fc" id="L102">		}</span>
+<span class="fc" id="L103">		reader.getCSVEntries(input, WeatherRecord::new, &quot;,&quot;, Locale.ENGLISH, true);</span>
+		try {
+<span class="nc" id="L105">			reader.getCSVEntries(input, WeatherRecord::new, &quot;,&quot;, Locale.ENGLISH, true);</span>
+<span class="fc" id="L106">		} catch (IllegalStateException e) {</span>
+			// expected exception
+<span class="fc" id="L108">			return;</span>
+<span class="nc" id="L109">		}</span>
+<span class="nc" id="L110">		fail(&quot;Expected exception was not thrown!&quot;);</span>
+<span class="nc" id="L111">	}</span>
+
+	/**
+	 * Reads the entries from the file and asserts the expected errors/entry count
+	 * 
+	 * @param filename
+	 * @param lenient
+	 * @param expectedRecords
+	 * @param expectedErrors
+	 * @return the successfully read records if the counts match
+	 */
+	private List&lt;WeatherRecord&gt; testReader(String filename, boolean lenient, int expectedRecords, int expectedErrors) {
+<span class="fc" id="L123">		ICSVReader&lt;WeatherRecord&gt; reader = getTestReader();</span>
+
+<span class="fc" id="L125">		InputStream input = null;</span>
+<span class="fc" id="L126">		File file = new File(filename);</span>
+		try {
+<span class="fc" id="L128">			input = new FileInputStream(file);</span>
+<span class="nc" id="L129">		} catch (FileNotFoundException e) {</span>
+<span class="nc" id="L130">			fail(&quot;File for testing was not found: &quot; + file.getAbsolutePath(), e);</span>
+<span class="fc" id="L131">		}</span>
+<span class="fc" id="L132">		List&lt;WeatherRecord&gt; csvEntries = reader.getCSVEntries(input, WeatherRecord::new, &quot;,&quot;, Locale.ENGLISH, lenient);</span>
+<span class="fc" id="L133">		assertEquals(expectedRecords, csvEntries.size(), &quot;Unexpected record count of the parser.&quot;);</span>
+<span class="fc" id="L134">		assertEquals(expectedErrors, reader.getLinesWithError().length, &quot;Unexpected error count of the parser.&quot;);</span>
+<span class="fc bfc" id="L135" title="All 2 branches covered.">		assertEquals(expectedErrors &gt; 0, reader.hasError(), &quot;Unexpected state of hasError.&quot;);</span>
+<span class="fc" id="L136">		return csvEntries;</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.3.201901230119</span>WeatherReader_BLWeather_BLFootball_AppTests</div></body></html>

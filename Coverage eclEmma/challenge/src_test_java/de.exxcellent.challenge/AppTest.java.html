@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../jacoco-resources/report.gif" type="image/gif"/><title>AppTest.java</title><link rel="stylesheet" href="../../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">WeatherReader_BLWeather_BLFootball_AppTests</a> &gt; <a href="../../index.html" class="el_group">challenge</a> &gt; <a href="../index.html" class="el_bundle">src/test/java</a> &gt; <a href="index.source.html" class="el_package">de.exxcellent.challenge</a> &gt; <span class="el_source">AppTest.java</span></div><h1>AppTest.java</h1><pre class="source lang-java linenums">package de.exxcellent.challenge;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
+
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+
+/**
+ * Example JUnit 5 test case.
+ * 
+ * @author Benjamin Schmid &lt;benjamin.schmid@exxcellent.de&gt;
+ */
+<span class="fc" id="L18">class AppTest {</span>
+
+<span class="fc" id="L20">	private static final PrintStream stdOut = System.out;</span>
+<span class="fc" id="L21">	private static final PrintStream stdErr = System.err;</span>
+<span class="fc" id="L22">	private static final ByteArrayOutputStream outContent = new ByteArrayOutputStream();</span>
+<span class="fc" id="L23">	private static final ByteArrayOutputStream errContent = new ByteArrayOutputStream();</span>
+
+	@BeforeAll
+	public static void setUpStreams() {
+<span class="fc" id="L27">		System.setOut(new PrintStream(outContent));</span>
+<span class="fc" id="L28">		System.setErr(new PrintStream(errContent));</span>
+<span class="fc" id="L29">	}</span>
+
+	@AfterAll
+	public static void restoreStreams() {
+<span class="fc" id="L33">		System.setOut(stdOut);</span>
+<span class="fc" id="L34">		System.setErr(stdErr);</span>
+<span class="fc" id="L35">	}</span>
+
+	@Test
+	void runFootball() {
+<span class="fc" id="L39">		App.main(&quot;--football&quot;, &quot;src/main/resources/de/exxcellent/challenge/football.csv&quot;);</span>
+<span class="fc" id="L40">		assertTrue(outContent.toString().contains(&quot;Team with smallest goal spread       : Aston_Villa&quot;),</span>
+<span class="fc" id="L41">				&quot;Expected team not present in the output.&quot;);</span>
+<span class="fc" id="L42">	}</span>
+
+	@Test
+	void runFootballFail() {
+<span class="pc" id="L46">		assertThrows(RuntimeException.class, () -&gt; App.main(&quot;--football&quot;, &quot;.&quot;));</span>
+<span class="fc" id="L47">	}</span>
+
+	@Test
+	void runWeather() {
+<span class="fc" id="L51">		App.main(&quot;--weather&quot;, &quot;src/main/resources/de/exxcellent/challenge/weather.csv&quot;);</span>
+<span class="fc" id="L52">		assertTrue(outContent.toString().contains(&quot;Day with smallest temperature spread : 14&quot;),</span>
+<span class="fc" id="L53">				&quot;Expected team not present in the output.&quot;);</span>
+<span class="fc" id="L54">	}</span>
+
+	@Test
+	void runWeatherFail() {
+<span class="pc" id="L58">		assertThrows(RuntimeException.class, () -&gt; App.main(&quot;--weather&quot;, &quot;.&quot;));</span>
+<span class="fc" id="L59">	}</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.3.201901230119</span>WeatherReader_BLWeather_BLFootball_AppTests</div></body></html>

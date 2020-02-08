@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../jacoco-resources/report.gif" type="image/gif"/><title>App.java</title><link rel="stylesheet" href="../../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">WeatherReader_BLWeather_BLFootball_AppTests</a> &gt; <a href="../../index.html" class="el_group">challenge</a> &gt; <a href="../index.html" class="el_bundle">src/main/java</a> &gt; <a href="index.source.html" class="el_package">de.exxcellent.challenge</a> &gt; <span class="el_source">App.java</span></div><h1>App.java</h1><pre class="source lang-java linenums">package de.exxcellent.challenge;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.List;
+
+import de.exxcellent.challenge.businessLogic.BLFootballData;
+import de.exxcellent.challenge.businessLogic.BLWeatherData;
+import de.exxcellent.challenge.businessobject.FootballTeam;
+import de.exxcellent.challenge.businessobject.WeatherRecord;
+
+/**
+ * The entry class for your solution. This class is only aimed as starting point
+ * and not intended as baseline for your software design. Read: create your own
+ * classes and packages as appropriate.
+ *
+ * @author Benjamin Schmid &lt;benjamin.schmid@exxcellent.de&gt;
+ */
+<span class="nc" id="L19">public final class App {</span>
+
+	/**
+	 * This is the main entry method of your program.
+	 * Going from the AppTest it is assumed that parameters are expected, i.e. --weather filename
+	 * 
+	 * @param args The CLI arguments passed
+	 * @throws FileNotFoundException
+	 */
+	public static void main(String... args) {
+
+		// Your preparation code …
+<span class="fc" id="L31">		String weatherFileName = &quot;&quot;;</span>
+<span class="fc" id="L32">		String footballFileName = &quot;&quot;;</span>
+<span class="fc bfc" id="L33" title="All 2 branches covered.">		for (int i = 0; i &lt; args.length; i++) {</span>
+<span class="fc bfc" id="L34" title="All 2 branches covered.">			if (&quot;--weather&quot;.equals(args[i])) {</span>
+<span class="fc" id="L35">				weatherFileName = getAbsoluteFileNameForParameter(args, i);</span>
+<span class="fc" id="L36">				continue;</span>
+			}
+<span class="fc bfc" id="L38" title="All 2 branches covered.">			if (&quot;--football&quot;.equals(args[i])) {</span>
+<span class="fc" id="L39">				footballFileName = getAbsoluteFileNameForParameter(args, i);</span>
+			}
+		}
+<span class="fc bfc" id="L42" title="All 2 branches covered.">		if (!weatherFileName.isBlank()) {</span>
+<span class="fc" id="L43">			List&lt;WeatherRecord&gt; weather = BLWeatherData.readRecordsFromFile(weatherFileName);</span>
+<span class="fc" id="L44">			String dayWithSmallestTempSpread = BLWeatherData.getLowestSpread(weather).getDay() + &quot;&quot;;</span>
+<span class="fc" id="L45">			System.out.printf(&quot;Day with smallest temperature spread : %s%n&quot;, dayWithSmallestTempSpread);</span>
+		}
+<span class="fc bfc" id="L47" title="All 2 branches covered.">		if (!footballFileName.isBlank()) {</span>
+<span class="fc" id="L48">			List&lt;FootballTeam&gt; teams = BLFootballData.readRecordsFromFile(footballFileName);</span>
+<span class="fc" id="L49">			String teamWithSmallestGoalSpread = BLFootballData.getLowestDiffInGoals(teams).getTeam();</span>
+<span class="fc" id="L50">			System.out.printf(&quot;Team with smallest goal spread       : %s%n&quot;, teamWithSmallestGoalSpread);</span>
+		}
+<span class="fc" id="L52">	}</span>
+
+	private static String getAbsoluteFileNameForParameter(String[] args, int idx) {
+<span class="pc bpc" id="L55" title="1 of 2 branches missed.">		if (idx + 1 &gt;= args.length) {</span>
+<span class="nc" id="L56">			throw new RuntimeException(args[idx] + &quot; needs to be followed by the filename!&quot;);</span>
+		}
+<span class="fc" id="L58">		File csvFile = new File(args[idx + 1]);</span>
+<span class="pc bpc" id="L59" title="1 of 4 branches missed.">		if (!(csvFile.canRead() &amp;&amp; csvFile.isFile())) {</span>
+<span class="fc" id="L60">			throw new RuntimeException(&quot;Unable to read file at: &quot; + csvFile.getAbsolutePath());</span>
+		}
+<span class="fc" id="L62">		return csvFile.getAbsolutePath();</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.3.201901230119</span>WeatherReader_BLWeather_BLFootball_AppTests</div></body></html>

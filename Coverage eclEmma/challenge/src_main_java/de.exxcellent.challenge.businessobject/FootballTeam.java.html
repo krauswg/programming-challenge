@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../jacoco-resources/report.gif" type="image/gif"/><title>FootballTeam.java</title><link rel="stylesheet" href="../../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">WeatherReader_BLWeather_BLFootball_AppTests</a> &gt; <a href="../../index.html" class="el_group">challenge</a> &gt; <a href="../index.html" class="el_bundle">src/main/java</a> &gt; <a href="index.source.html" class="el_package">de.exxcellent.challenge.businessobject</a> &gt; <span class="el_source">FootballTeam.java</span></div><h1>FootballTeam.java</h1><pre class="source lang-java linenums">/**
+ * 
+ */
+package de.exxcellent.challenge.businessobject;
+
+import java.text.NumberFormat;
+import java.util.Locale;
+
+import de.exxcellent.challenge.CSVException;
+import de.exxcellent.challenge.CSVUtil;
+import de.exxcellent.challenge.interfaces.IReadableFromCSV;
+
+/**
+ * BusinessObject for an Entry of the football CSV file.
+ * Assumptions for the task:
+ * Team is a string, everything else is an int.
+ */
+<span class="fc" id="L18">public class FootballTeam implements IReadableFromCSV {</span>
+
+	private static final int amountFields = 8;
+	/*
+	 * Header and data:
+	 * Team,Games,Wins,Losses,Draws,Goals,Goals Allowed,Points
+	 * Arsenal,38,26,9,3,79,36,87
+	 */
+	private String team;
+	private int games;
+	private int wins;
+	private int losses;
+	private int draws;
+	private int goals;
+	private int goalsAllowed;
+	private int points;
+
+	@Override
+	public IReadableFromCSV parseLine(String[] values, Locale locale, boolean lenient) throws CSVException {
+<span class="pc bpc" id="L37" title="1 of 2 branches missed.">		if (values.length != amountFields) {</span>
+<span class="nc" id="L38">			throw new CSVException(&quot;Amount of Values and Fields do not match.&quot;);</span>
+		}
+<span class="fc" id="L40">		NumberFormat numberFormat = NumberFormat.getInstance(locale);</span>
+<span class="fc" id="L41">		int i = 0;</span>
+		// * Day,MxT,MnT,AvT,AvDP,1HrP TPcpn,PDir,AvSp,Dir,MxS,SkyC,MxR,Mn,R AvSLP
+<span class="fc" id="L43">		team = values[i++];</span>
+<span class="fc" id="L44">		games = CSVUtil.getNumber(values[i++], lenient, numberFormat).intValue();</span>
+<span class="fc" id="L45">		wins = CSVUtil.getNumber(values[i++], lenient, numberFormat).intValue();</span>
+<span class="fc" id="L46">		losses = CSVUtil.getNumber(values[i++], lenient, numberFormat).intValue();</span>
+<span class="fc" id="L47">		draws = CSVUtil.getNumber(values[i++], lenient, numberFormat).intValue();</span>
+<span class="fc" id="L48">		goals = CSVUtil.getNumber(values[i++], lenient, numberFormat).intValue();</span>
+<span class="fc" id="L49">		goalsAllowed = CSVUtil.getNumber(values[i++], lenient, numberFormat).intValue();</span>
+<span class="fc" id="L50">		points = CSVUtil.getNumber(values[i++], lenient, numberFormat).intValue();</span>
+
+<span class="fc" id="L52">		return this;</span>
+	}
+
+	public String getTeam() {
+<span class="fc" id="L56">		return team;</span>
+	}
+
+	public int getGames() {
+<span class="nc" id="L60">		return games;</span>
+	}
+
+	public int getWins() {
+<span class="nc" id="L64">		return wins;</span>
+	}
+
+	public int getLosses() {
+<span class="nc" id="L68">		return losses;</span>
+	}
+
+	public int getDraws() {
+<span class="nc" id="L72">		return draws;</span>
+	}
+
+	public int getGoals() {
+<span class="fc" id="L76">		return goals;</span>
+	}
+
+	public int getGoalsAllowed() {
+<span class="fc" id="L80">		return goalsAllowed;</span>
+	}
+
+	public int getPoints() {
+<span class="nc" id="L84">		return points;</span>
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.3.201901230119</span>WeatherReader_BLWeather_BLFootball_AppTests</div></body></html>

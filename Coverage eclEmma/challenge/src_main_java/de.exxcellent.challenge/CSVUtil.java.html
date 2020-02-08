@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../jacoco-resources/report.gif" type="image/gif"/><title>CSVUtil.java</title><link rel="stylesheet" href="../../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">WeatherReader_BLWeather_BLFootball_AppTests</a> &gt; <a href="../../index.html" class="el_group">challenge</a> &gt; <a href="../index.html" class="el_bundle">src/main/java</a> &gt; <a href="index.source.html" class="el_package">de.exxcellent.challenge</a> &gt; <span class="el_source">CSVUtil.java</span></div><h1>CSVUtil.java</h1><pre class="source lang-java linenums">/**
+ * 
+ */
+package de.exxcellent.challenge;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.lang.invoke.MethodHandles;
+import java.text.NumberFormat;
+import java.text.ParsePosition;
+import java.util.Collections;
+import java.util.List;
+import java.util.Locale;
+import java.util.function.Supplier;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import de.exxcellent.challenge.interfaces.IReadableFromCSV;
+
+/**
+ * Provides several utility methods for working with CSV Files and records
+ * 
+ * @author krauswg
+ */
+<span class="nc" id="L26">public class CSVUtil {</span>
+<span class="fc" id="L27">	private static final Logger LOG = Logger.getLogger(MethodHandles.lookup().getClass().getSimpleName());</span>
+
+	public static Number getNumber(String value, boolean lenient, NumberFormat numberFormat) throws CSVException {
+<span class="fc" id="L30">		ParsePosition pos = new ParsePosition(0);</span>
+<span class="fc" id="L31">		Number field = numberFormat.parse(value, pos);</span>
+<span class="pc bpc" id="L32" title="3 of 4 branches missed.">		if (pos.getIndex() == 0 &amp;&amp; !value.isBlank()) {</span>
+<span class="nc" id="L33">			throw new CSVException(value);</span>
+		}
+<span class="fc bfc" id="L35" title="All 4 branches covered.">		if (!lenient &amp;&amp; (pos.getIndex() &lt; value.length() - 1)) {</span>
+<span class="fc" id="L36">			throw new CSVException(value);</span>
+		}
+<span class="fc" id="L38">		return field;</span>
+	}
+
+	/**
+	 * Reads the records from the file
+	 * 
+	 * @param filename to read
+	 * @return the entries or an {@link Collections#emptyList()} if the file could not be read
+	 */
+	public static &lt;BOType extends IReadableFromCSV&gt; List&lt;BOType&gt; readRecordsFromFile(String filename,
+			Supplier&lt;BOType&gt; constructor) {
+<span class="fc" id="L49">		SimpleCSVReader&lt;BOType&gt; reader = new SimpleCSVReader&lt;&gt;();</span>
+		List&lt;BOType&gt; records;
+<span class="fc" id="L51">		File file = new File(filename);</span>
+<span class="pc bpc" id="L52" title="1 of 4 branches missed.">		if (!(file.isFile() &amp;&amp; file.canRead())) {</span>
+<span class="fc" id="L53">			LOG.log(Level.WARNING, &quot;Not a file or does not exist: &quot; + file.getAbsolutePath());</span>
+<span class="fc" id="L54">			return Collections.&lt;BOType&gt;emptyList();</span>
+		}
+		try {
+<span class="fc" id="L57">			records = reader.getCSVEntries(new FileInputStream(file), constructor, &quot;,&quot;, Locale.ENGLISH, false);</span>
+<span class="nc" id="L58">		} catch (FileNotFoundException e) {</span>
+<span class="nc" id="L59">			LOG.log(Level.WARNING, &quot;Unable to read file: &quot; + file.getAbsolutePath(), e);</span>
+<span class="nc" id="L60">			return Collections.&lt;BOType&gt;emptyList();</span>
+<span class="fc" id="L61">		}</span>
+
+<span class="fc" id="L63">		return records;</span>
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.3.201901230119</span>WeatherReader_BLWeather_BLFootball_AppTests</div></body></html>

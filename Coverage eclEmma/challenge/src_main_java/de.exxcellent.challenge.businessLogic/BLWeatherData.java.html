@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../jacoco-resources/report.gif" type="image/gif"/><title>BLWeatherData.java</title><link rel="stylesheet" href="../../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">WeatherReader_BLWeather_BLFootball_AppTests</a> &gt; <a href="../../index.html" class="el_group">challenge</a> &gt; <a href="../index.html" class="el_bundle">src/main/java</a> &gt; <a href="index.source.html" class="el_package">de.exxcellent.challenge.businessLogic</a> &gt; <span class="el_source">BLWeatherData.java</span></div><h1>BLWeatherData.java</h1><pre class="source lang-java linenums">package de.exxcellent.challenge.businessLogic;
+
+import java.util.Collections;
+import java.util.List;
+
+import de.exxcellent.challenge.CSVUtil;
+import de.exxcellent.challenge.businessobject.WeatherRecord;
+
+<span class="nc" id="L9">public class BLWeatherData {</span>
+
+	/**
+	 * Reads the records from the file
+	 * 
+	 * @param filename to read
+	 * @return the entries or an {@link Collections#emptyList()} if the file could not be read
+	 */
+	public static List&lt;WeatherRecord&gt; readRecordsFromFile(String filename) {
+<span class="fc" id="L18">		List&lt;WeatherRecord&gt; weather = CSVUtil.readRecordsFromFile(filename, WeatherRecord::new);</span>
+<span class="fc" id="L19">		return weather;</span>
+	}
+
+	/**
+	 * Determines the day with the lowest spread between {@link WeatherRecord#getMxT()} and
+	 * {@link WeatherRecord#getMnT()}
+	 * 
+	 * @param records to evaluate
+	 * @return the record with the lowest spread, or &lt;code&gt;null&lt;/code&gt; if the list was empty.
+	 */
+	public static WeatherRecord getLowestSpread(List&lt;WeatherRecord&gt; records) {
+<span class="fc" id="L30">		WeatherRecord min = records.stream().min((w1, w2) -&gt; (w1.getMxT() - w1.getMnT()) - (w2.getMxT() - w2.getMnT()))</span>
+<span class="fc" id="L31">				.orElse(null);</span>
+<span class="fc" id="L32">		return min;</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.3.201901230119</span>WeatherReader_BLWeather_BLFootball_AppTests</div></body></html>

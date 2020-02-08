@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../jacoco-resources/report.gif" type="image/gif"/><title>BLFootballData.java</title><link rel="stylesheet" href="../../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">WeatherReader_BLWeather_BLFootball_AppTests</a> &gt; <a href="../../index.html" class="el_group">challenge</a> &gt; <a href="../index.html" class="el_bundle">src/main/java</a> &gt; <a href="index.source.html" class="el_package">de.exxcellent.challenge.businessLogic</a> &gt; <span class="el_source">BLFootballData.java</span></div><h1>BLFootballData.java</h1><pre class="source lang-java linenums">/**
+ * 
+ */
+package de.exxcellent.challenge.businessLogic;
+
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
+import de.exxcellent.challenge.CSVUtil;
+import de.exxcellent.challenge.businessobject.FootballTeam;
+
+/**
+ * Methods to work on {@link FootballTeam} data
+ */
+<span class="nc" id="L16">public class BLFootballData {</span>
+
+	/**
+	 * Reads the records from the football team file
+	 * 
+	 * @param filename to read
+	 * @return the entries or an {@link Collections#emptyList()} if the file could not be read
+	 */
+	public static List&lt;FootballTeam&gt; readRecordsFromFile(String filename) {
+<span class="fc" id="L25">		List&lt;FootballTeam&gt; teams = CSVUtil.readRecordsFromFile(filename, FootballTeam::new);</span>
+<span class="fc" id="L26">		return teams;</span>
+	}
+
+	/**
+	 * Determines the team with the lowest absolute difference in goals and goals allowed
+	 * 
+	 * @param teams to use
+	 * @return the {@link FootballTeam}, or &lt;code&gt;null&lt;/code&gt; if the list was empty.
+	 */
+	public static FootballTeam getLowestDiffInGoals(List&lt;FootballTeam&gt; teams) {
+<span class="fc" id="L36">		return teams.stream().min(getComparatorAbsGoalDiff()).orElse(null);</span>
+	}
+
+	/**
+	 * @return a lambda comparator which compare the absolute difference between goals and goals allowed
+	 */
+	private static Comparator&lt;FootballTeam&gt; getComparatorAbsGoalDiff() {
+<span class="fc" id="L43">		return (t1, t2) -&gt; {</span>
+<span class="fc" id="L44">			int diff1 = Math.abs(t1.getGoals() - t1.getGoalsAllowed());</span>
+<span class="fc" id="L45">			int diff2 = Math.abs(t2.getGoals() - t2.getGoalsAllowed());</span>
+<span class="fc" id="L46">			return diff1 - diff2;</span>
+		};
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.3.201901230119</span>WeatherReader_BLWeather_BLFootball_AppTests</div></body></html>

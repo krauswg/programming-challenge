@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../jacoco-resources/report.gif" type="image/gif"/><title>WeatherRecord.java</title><link rel="stylesheet" href="../../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">WeatherReader_BLWeather_BLFootball_AppTests</a> &gt; <a href="../../index.html" class="el_group">challenge</a> &gt; <a href="../index.html" class="el_bundle">src/main/java</a> &gt; <a href="index.source.html" class="el_package">de.exxcellent.challenge.businessobject</a> &gt; <span class="el_source">WeatherRecord.java</span></div><h1>WeatherRecord.java</h1><pre class="source lang-java linenums">package de.exxcellent.challenge.businessobject;
+
+import java.text.NumberFormat;
+import java.util.Locale;
+
+import de.exxcellent.challenge.CSVException;
+import de.exxcellent.challenge.CSVUtil;
+import de.exxcellent.challenge.interfaces.IReadableFromCSV;
+
+/**
+ * BusinessObject for an Entry of the weather CSV file.
+ * Assumptions for the task:
+ * MxT and MnT are treated as integers.
+ * All other fields are treated as Number, subject to change.
+ * 
+ * @author krauswg
+ */
+<span class="fc" id="L18">public class WeatherRecord implements IReadableFromCSV {</span>
+
+<span class="fc" id="L20">	private final int amountFields = 14;</span>
+	/*
+	 * Header and data:
+	 * Day,MxT,MnT,AvT,AvDP,1HrP TPcpn,PDir,AvSp,Dir,MxS,SkyC,MxR,Mn,R AvSLP
+	 * 1,88,59,74,53.8,0,280,9.6,270,17,1.6,93,23,1004.5
+	 */
+	private Number day;
+	private int mxT;
+	private int mnT;
+	private Number avT;
+	private Number avDP;
+	private Number x1hrP_TPcp;
+	private Number pDir;
+	private Number avSp;
+	private Number dir;
+	private Number mxS;
+	private Number skyC;
+	private Number mxr;
+	private Number mn;
+	private Number r_AvSLP;
+
+	@Override
+	public WeatherRecord parseLine(String[] values, Locale locale, boolean lenient) throws CSVException {
+<span class="fc bfc" id="L43" title="All 2 branches covered.">		if (values.length != amountFields) {</span>
+<span class="fc" id="L44">			throw new CSVException(&quot;Amount of Values and Fields do not match.&quot;);</span>
+		}
+<span class="fc" id="L46">		NumberFormat numberFormat = NumberFormat.getInstance(locale);</span>
+<span class="fc" id="L47">		int i = 0;</span>
+		// * Day,MxT,MnT,AvT,AvDP,1HrP TPcpn,PDir,AvSp,Dir,MxS,SkyC,MxR,Mn,R AvSLP
+<span class="fc" id="L49">		day = CSVUtil.getNumber(values[i++], lenient, numberFormat);</span>
+<span class="fc" id="L50">		mxT = CSVUtil.getNumber(values[i++], lenient, numberFormat).intValue();</span>
+<span class="fc" id="L51">		mnT = CSVUtil.getNumber(values[i++], lenient, numberFormat).intValue();</span>
+<span class="fc" id="L52">		avT = CSVUtil.getNumber(values[i++], lenient, numberFormat);</span>
+<span class="fc" id="L53">		avDP = CSVUtil.getNumber(values[i++], lenient, numberFormat);</span>
+<span class="fc" id="L54">		x1hrP_TPcp = CSVUtil.getNumber(values[i++], lenient, numberFormat);</span>
+<span class="fc" id="L55">		pDir = CSVUtil.getNumber(values[i++], lenient, numberFormat);</span>
+<span class="fc" id="L56">		avSp = CSVUtil.getNumber(values[i++], lenient, numberFormat);</span>
+<span class="fc" id="L57">		dir = CSVUtil.getNumber(values[i++], lenient, numberFormat);</span>
+<span class="fc" id="L58">		mxS = CSVUtil.getNumber(values[i++], lenient, numberFormat);</span>
+<span class="fc" id="L59">		skyC = CSVUtil.getNumber(values[i++], lenient, numberFormat);</span>
+<span class="fc" id="L60">		mxr = CSVUtil.getNumber(values[i++], lenient, numberFormat);</span>
+<span class="fc" id="L61">		mn = CSVUtil.getNumber(values[i++], lenient, numberFormat);</span>
+<span class="fc" id="L62">		r_AvSLP = CSVUtil.getNumber(values[i++], lenient, numberFormat);</span>
+<span class="fc" id="L63">		return this;</span>
+	}
+
+	public Number getDay() {
+<span class="fc" id="L67">		return day;</span>
+	}
+
+	public int getMxT() {
+<span class="fc" id="L71">		return mxT;</span>
+	}
+
+	public int getMnT() {
+<span class="fc" id="L75">		return mnT;</span>
+	}
+
+	public Number getAvT() {
+<span class="nc" id="L79">		return avT;</span>
+	}
+
+	public Number getAvDP() {
+<span class="nc" id="L83">		return avDP;</span>
+	}
+
+	public Number getX1hrP_TPcp() {
+<span class="nc" id="L87">		return x1hrP_TPcp;</span>
+	}
+
+	public Number getpDir() {
+<span class="nc" id="L91">		return pDir;</span>
+	}
+
+	public Number getAvSp() {
+<span class="nc" id="L95">		return avSp;</span>
+	}
+
+	public Number getDir() {
+<span class="nc" id="L99">		return dir;</span>
+	}
+
+	public Number getMxS() {
+<span class="nc" id="L103">		return mxS;</span>
+	}
+
+	public Number getSkyC() {
+<span class="nc" id="L107">		return skyC;</span>
+	}
+
+	public Number getMxr() {
+<span class="nc" id="L111">		return mxr;</span>
+	}
+
+	public Number getMn() {
+<span class="nc" id="L115">		return mn;</span>
+	}
+
+	public Number getR_AvSLP() {
+<span class="fc" id="L119">		return r_AvSLP;</span>
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.3.201901230119</span>WeatherReader_BLWeather_BLFootball_AppTests</div></body></html>
