@@ -1,7 +1,7 @@
 /**
  * 
  */
-package de.exxcellent.challenge;
+package de.exxcellent.challenge.csvReader;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -16,6 +16,7 @@ import java.util.function.Supplier;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import de.exxcellent.challenge.interfaces.ICSVReader;
 import de.exxcellent.challenge.interfaces.IReadableFromCSV;
 
 /**
@@ -26,6 +27,16 @@ import de.exxcellent.challenge.interfaces.IReadableFromCSV;
 public class CSVUtil {
 	private static final Logger LOG = Logger.getLogger(MethodHandles.lookup().getClass().getSimpleName());
 
+	/**
+	 * Parses the string value to a number with the given format
+	 * 
+	 * @param value        to parse
+	 * @param lenient      whether all characters in an non-empty string must represent the number
+	 * @param numberFormat for e.g. decimal numbers
+	 * @return the Number, as {@link NumberFormat#parse(String)}
+	 * @throws CSVException if an non-empty string does not begin with a number, or if extraneous
+	 *                      characters exists and lenient == false
+	 */
 	public static Number getNumber(String value, boolean lenient, NumberFormat numberFormat) throws CSVException {
 		ParsePosition pos = new ParsePosition(0);
 		Number field = numberFormat.parse(value, pos);
@@ -46,7 +57,7 @@ public class CSVUtil {
 	 */
 	public static <BOType extends IReadableFromCSV> List<BOType> readRecordsFromFile(String filename,
 			Supplier<BOType> constructor) {
-		SimpleCSVReader<BOType> reader = new SimpleCSVReader<>();
+		ICSVReader<BOType> reader = new SimpleCSVReader<>();
 		List<BOType> records;
 		File file = new File(filename);
 		if (!(file.isFile() && file.canRead())) {

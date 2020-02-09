@@ -1,4 +1,4 @@
-package de.exxcellent.challenge;
+package de.exxcellent.challenge.csvReader;
 
 import java.io.InputStream;
 import java.lang.invoke.MethodHandles;

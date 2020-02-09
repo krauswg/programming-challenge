@@ -3,9 +3,14 @@ package de.exxcellent.challenge.businessLogic;
 import java.util.Collections;
 import java.util.List;
 
-import de.exxcellent.challenge.CSVUtil;
 import de.exxcellent.challenge.businessobject.WeatherRecord;
+import de.exxcellent.challenge.csvReader.CSVUtil;
 
+/**
+ * Methods to work with {@link WeatherRecord} data.
+ * 
+ * @author krauswg
+ */
 public class BLWeatherData {
 
 	/**

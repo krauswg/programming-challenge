@@ -3,8 +3,8 @@ package de.exxcellent.challenge.businessobject;
 import java.text.NumberFormat;
 import java.util.Locale;
 
-import de.exxcellent.challenge.CSVException;
-import de.exxcellent.challenge.CSVUtil;
+import de.exxcellent.challenge.csvReader.CSVException;
+import de.exxcellent.challenge.csvReader.CSVUtil;
 import de.exxcellent.challenge.interfaces.IReadableFromCSV;
 
 /**

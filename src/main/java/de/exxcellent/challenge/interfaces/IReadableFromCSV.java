@@ -2,8 +2,13 @@ package de.exxcellent.challenge.interfaces;
 
 import java.util.Locale;
 
-import de.exxcellent.challenge.CSVException;
+import de.exxcellent.challenge.csvReader.CSVException;
 
+/**
+ * Interface for data types where the values can be set with a string array
+ * 
+ * @author krauswg
+ */
 public interface IReadableFromCSV {
 
 	/**

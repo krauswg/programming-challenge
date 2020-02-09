@@ -1,4 +1,4 @@
-package de.exxcellent.challenge;
+package de.exxcellent.challenge.csvReader;
 
 /**
  * Used to indicate that a cell from the CSV file has invalid data, or in the strict case extraneous data.

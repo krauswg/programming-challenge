@@ -13,6 +13,7 @@ import java.util.Locale;
 import org.junit.jupiter.api.Test;
 
 import de.exxcellent.challenge.businessobject.WeatherRecord;
+import de.exxcellent.challenge.csvReader.SimpleCSVReader;
 import de.exxcellent.challenge.interfaces.ICSVReader;
 
 public class WeatherReaderTest {
